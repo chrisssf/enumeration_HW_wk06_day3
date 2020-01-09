@@ -7,47 +7,40 @@ AnagramFinder.prototype.stringToArray = function (string) {
   return letters;
 };
 
-AnagramFinder.prototype.findAnagrams = function (otherWords) {
-  wordArray = this.stringToArray(this.word);
+AnagramFinder.prototype.findAnagrams = function (checkWords) {
+  wordAsArray = this.stringToArray(this.word);
   let matchingLetters;
   let allMatchingLetters = [];
-  let allMatchingLettersForAllGivenOtherWords = [];
+  let allMatchingLettersForAllGivenCheckWords = [];
   let isItAnAnagram;
 
-  const otherWordsAsArray = otherWords.map((eachOtherWord) => {
-    return this.stringToArray(eachOtherWord); // this works and does what i think it does
-  })
-
-  // for (let otherWord of otherWordsAsArray) {
-  otherWordsAsArray.forEach((otherWord, index, array) => {
-    for (let wordLetter of wordArray) {
-       // matchingLetters = otherWordsAsArray[0].filter((letter) => {
-       matchingLetters = otherWord.filter((letter) => {
-        return wordLetter === letter;
+  const checkWordsAsArray = checkWords.map((eachCheckWord) => {
+    return this.stringToArray(eachCheckWord);
+  });
+  checkWordsAsArray.forEach((checkWord, index, array) => {
+    for (const wordLetter of wordAsArray) {
+       matchingLetters = checkWord.filter((letter) => {
+        return wordLetter.toLowerCase() === letter.toLowerCase();
       });
-        allMatchingLetters.push(matchingLetters[0])
+      allMatchingLetters.push(matchingLetters[0]);
     };
-// here all matching letters is full of the matching letters for this otherWord
     isItAnAnagram = allMatchingLetters.every((letter) => {
-      return letter !== undefined;
+      return array[index].length === wordAsArray.length && letter !== undefined && array[index].toString() !== wordAsArray.toString()
     });
 
+    // if (array[index].toString() == wordAsArray.toString()) {
+    //   isItAnAnagram = false;
+    // };
+
     if (isItAnAnagram === true) {
-      allMatchingLettersForAllGivenOtherWords.push(array[index])
-    }
-  // allMatchingLettersForAllGivenOtherWords.push(allMatchingLetters)
-  allMatchingLetters = []
-});
-// return isItAnAnagram
+      allMatchingLettersForAllGivenCheckWords.push(array[index]);
+    };
+    allMatchingLetters = [];
+  });
 
-  return allMatchingLettersForAllGivenOtherWords.map((word) => {
-    return word.join("")
-  })
-  return allMatchingLettersForAllGivenOtherWords
-
-  // return otherWordsAsArray this can return what i think it returns
-  // return wordArray
-}
-
+  return allMatchingLettersForAllGivenCheckWords.map((word) => {
+    return word.join("");
+  });
+};
 
 module.exports = AnagramFinder;
